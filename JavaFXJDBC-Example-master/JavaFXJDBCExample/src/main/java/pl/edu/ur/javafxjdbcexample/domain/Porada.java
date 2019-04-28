@@ -3,6 +3,7 @@ package pl.edu.ur.javafxjdbcexample.domain;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @Table(name = "porady_lekarskie")
@@ -14,10 +15,16 @@ public class Porada {
     private LocalDate data;
     @Column(name = "godzina")
     private LocalTime godzina;
-    @Column(name = "id_lekarza")
-    private int id_lekarza;
-    @Column(name = "id_pacjenta")
-    private int id_pacjenta;
+    @ManyToOne
+    @JoinColumn(name = "id_lekarza")
+    private Lekarz lekarz;
+    @ManyToOne
+    @JoinColumn(name = "id_pacjenta")
+    private Pacjent pacjent;
+    @ManyToMany
+    private List<Choroba> choroby;
+    @ManyToMany
+    private List<Lek> leki;
 
     public int getId_porady() {
         return id_porady;
@@ -31,12 +38,20 @@ public class Porada {
         return godzina;
     }
 
-    public int getId_lekarza() {
-        return id_lekarza;
+    public Lekarz getLekarz() {
+        return lekarz;
     }
 
-    public int getId_pacjenta() {
-        return id_pacjenta;
+    public Pacjent getPacjent() {
+        return pacjent;
+    }
+    
+    public List<Choroba> getChoroby() {
+        return choroby;
+    }
+    
+    public List<Lek> getLeki() {
+        return leki;
     }
 
     public void setId_porady(int id_porady) {
@@ -51,11 +66,19 @@ public class Porada {
         this.godzina = godzina;
     }
 
-    public void setId_lekarza(int id_lekarza) {
-        this.id_lekarza = id_lekarza;
+    public void setLekarz(Lekarz lekarz) {
+        this.lekarz = lekarz;
     }
 
-    public void setId_pacjenta(int id_pacjenta) {
-        this.id_pacjenta = id_pacjenta;
+    public void setPacjent(Pacjent pacjent) {
+        this.pacjent = pacjent;
+    }
+    
+    public void setChoroby(List<Choroba> choroby) {
+        this.choroby = choroby;
+    }
+    
+    public void setLeki(List<Lek> leki) {
+        this.leki = leki;
     }
 }

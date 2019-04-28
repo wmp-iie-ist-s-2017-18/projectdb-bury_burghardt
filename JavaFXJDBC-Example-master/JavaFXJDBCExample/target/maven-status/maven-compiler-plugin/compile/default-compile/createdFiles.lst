@@ -1,4 +1,9 @@
+pl\edu\ur\javafxjdbcexample\domain\Choroba.class
+pl\edu\ur\javafxjdbcexample\domain\Porada.class
+pl\edu\ur\javafxjdbcexample\database\DatabaseHelper.class
+pl\edu\ur\javafxjdbcexample\domain\Lek.class
+pl\edu\ur\javafxjdbcexample\domain\Lekarz.class
 pl\edu\ur\javafxjdbcexample\FXMLController.class
 pl\edu\ur\javafxjdbcexample\FXMLController$1.class
-pl\edu\ur\javafxjdbcexample\database\DatabaseHelper.class
+pl\edu\ur\javafxjdbcexample\domain\Pacjent.class
 pl\edu\ur\javafxjdbcexample\MainApp.class

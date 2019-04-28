@@ -1,5 +1,6 @@
 package pl.edu.ur.javafxjdbcexample.domain;
 
+import java.util.List;
 import javax.persistence.*;
 
 @Entity
@@ -14,6 +15,8 @@ public class Pacjent {
     private String nazwisko;
     @Column(name = "pesel",nullable = false, length = 11)
     private long pesel;
+    @OneToMany(mappedBy = "pacjent")
+    private List<Porada> porady;
 
     public int getId_pacjenta() {
         return id_pacjenta;

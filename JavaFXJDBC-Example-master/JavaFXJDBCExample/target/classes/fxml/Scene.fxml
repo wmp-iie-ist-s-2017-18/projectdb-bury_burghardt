@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="AnchorPane" prefHeight="306.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.edu.ur.javafxjdbcexample.FXMLController">
+<AnchorPane id="AnchorPane" prefHeight="306.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.edu.ur.javafxjdbcexample.FXMLController">
     <children>
       <TabPane prefHeight="500.0" prefWidth="750.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
@@ -23,15 +23,15 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TextField layoutX="120.0" layoutY="43.0" prefHeight="0.0" prefWidth="150.0" />
+                        <TextField fx:id="tf_por_id" layoutX="120.0" layoutY="43.0" prefHeight="0.0" prefWidth="150.0" />
                         <TextField layoutX="120.0" layoutY="83.0" prefHeight="0.0" prefWidth="150.0" />
                         <TextField layoutX="120.0" layoutY="123.0" prefHeight="0.0" prefWidth="150.0" />
                         <TextField layoutX="120.0" layoutY="163.0" prefHeight="0.0" prefWidth="150.0" />
                         <TextField layoutX="120.0" layoutY="203.0" prefHeight="0.0" prefWidth="150.0" />
-                        <Button fx:id="btn_wczytaj_porady" layoutX="50.0" layoutY="280.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="220.0" text="Wczytaj" />
-                        <Button fx:id="btn_dodaj_porady" layoutX="50.0" layoutY="320.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="220.0" text="Dodaj" />
-                        <Button fx:id="btn_zmodyfikuj_porady" layoutX="50.0" layoutY="360.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="220.0" text="Zmodyfikuj" />
-                        <Button fx:id="btn_usun_porady" layoutX="50.0" layoutY="400.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="220.0" text="Usuń" />
+                        <Button fx:id="btn_wczytaj_porady" layoutX="50.0" layoutY="280.0" mnemonicParsing="false" onAction="#wczytajPorady" prefHeight="25.0" prefWidth="220.0" text="Wczytaj" />
+                        <Button fx:id="btn_dodaj_porady" layoutX="50.0" layoutY="320.0" mnemonicParsing="false" onAction="#dodajPorade" prefHeight="25.0" prefWidth="220.0" text="Dodaj" />
+                        <Button fx:id="btn_zmodyfikuj_porady" layoutX="50.0" layoutY="360.0" mnemonicParsing="false" onAction="#modyfikujPorade" prefHeight="25.0" prefWidth="220.0" text="Zmodyfikuj" />
+                        <Button fx:id="btn_usun_porady" layoutX="50.0" layoutY="400.0" mnemonicParsing="false" onAction="#usunPorade" prefHeight="25.0" prefWidth="220.0" text="Usuń" />
                         <TableView fx:id="tbe_porady" layoutX="318.0" layoutY="50.0" prefHeight="364.0" prefWidth="375.0">
                           <columns>
                             <TableColumn prefWidth="75.0" text="id_porady" />
@@ -70,10 +70,10 @@
                         <TextField layoutX="129.0" layoutY="83.0" prefHeight="0.0" prefWidth="150.0" />
                         <TextField layoutX="129.0" layoutY="123.0" prefHeight="0.0" prefWidth="150.0" />
                         <TextField layoutX="129.0" layoutY="163.0" prefHeight="0.0" prefWidth="150.0" />
-                        <Button fx:id="btn_wczytaj_pacjenci" layoutX="50.0" layoutY="280.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="220.0" text="Wczytaj" />
-                        <Button fx:id="btn_dodaj_pacjenci" layoutX="50.0" layoutY="320.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="220.0" text="Dodaj" />
-                        <Button fx:id="btn_zmodyfikuj_pacjenci" layoutX="50.0" layoutY="360.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="220.0" text="Zmodyfikuj" />
-                        <Button fx:id="btn_usun_pacjenci" layoutX="50.0" layoutY="400.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="220.0" text="Usuń" />
+                        <Button fx:id="btn_wczytaj_pacjenci" layoutX="50.0" layoutY="280.0" mnemonicParsing="false" onAction="#wczytajPacjentow" prefHeight="25.0" prefWidth="220.0" text="Wczytaj" />
+                        <Button fx:id="btn_dodaj_pacjenci" layoutX="50.0" layoutY="320.0" mnemonicParsing="false" onAction="#dodajPacjenta" prefHeight="25.0" prefWidth="220.0" text="Dodaj" />
+                        <Button fx:id="btn_zmodyfikuj_pacjenci" layoutX="50.0" layoutY="360.0" mnemonicParsing="false" onAction="#modyfikujPacjenta" prefHeight="25.0" prefWidth="220.0" text="Zmodyfikuj" />
+                        <Button fx:id="btn_usun_pacjenci" layoutX="50.0" layoutY="400.0" mnemonicParsing="false" onAction="#usunPacjenta" prefHeight="25.0" prefWidth="220.0" text="Usuń" />
                      </children></AnchorPane>
               </content>
             </Tab>
@@ -103,10 +103,10 @@
                         <TextField layoutX="122.0" layoutY="163.0" prefHeight="0.0" prefWidth="120.0" />
                         <TextField layoutX="122.0" layoutY="203.0" prefHeight="0.0" prefWidth="120.0" />
                         <TextField layoutX="122.0" layoutY="243.0" prefHeight="0.0" prefWidth="120.0" />
-                        <Button fx:id="btn_wczytaj_lekarze" layoutX="50.0" layoutY="280.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="190.0" text="Wczytaj" />
-                        <Button fx:id="btn_dodaj_lekarze" layoutX="50.0" layoutY="320.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="190.0" text="Dodaj" />
-                        <Button fx:id="btn_zmodyfikuj_lekarze" layoutX="50.0" layoutY="360.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="190.0" text="Zmodyfikuj" />
-                        <Button fx:id="btn_usun_lekarze" layoutX="50.0" layoutY="400.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="190.0" text="Usuń" />
+                        <Button fx:id="btn_wczytaj_lekarze" layoutX="50.0" layoutY="280.0" mnemonicParsing="false" onAction="#wczytajLekarzy" prefHeight="25.0" prefWidth="190.0" text="Wczytaj" />
+                        <Button fx:id="btn_dodaj_lekarze" layoutX="50.0" layoutY="320.0" mnemonicParsing="false" onAction="#dodajLekarza" prefHeight="25.0" prefWidth="190.0" text="Dodaj" />
+                        <Button fx:id="btn_zmodyfikuj_lekarze" layoutX="50.0" layoutY="360.0" mnemonicParsing="false" onAction="#modyfikujLekarza" prefHeight="25.0" prefWidth="190.0" text="Zmodyfikuj" />
+                        <Button fx:id="btn_usun_lekarze" layoutX="50.0" layoutY="400.0" mnemonicParsing="false" onAction="#usunLekarza" prefHeight="25.0" prefWidth="190.0" text="Usuń" />
                      </children></AnchorPane>
               </content>
             </Tab>
@@ -127,10 +127,10 @@
                         <TextField layoutX="120.0" layoutY="43.0" prefHeight="0.0" prefWidth="150.0" />
                         <TextField layoutX="120.0" layoutY="83.0" prefHeight="0.0" prefWidth="150.0" />
                         <TextField layoutX="120.0" layoutY="123.0" prefHeight="0.0" prefWidth="150.0" />
-                        <Button fx:id="btn_wczytaj_choroby" layoutX="50.0" layoutY="280.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="220.0" text="Wczytaj" />
-                        <Button fx:id="btn_dodaj_choroby" layoutX="50.0" layoutY="320.0" mnemonicParsing="false" prefWidth="220.0" text="Dodaj" />
-                        <Button fx:id="btn_zmodyfikuj_choroby" layoutX="50.0" layoutY="360.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="220.0" text="Zmodyfikuj" />
-                        <Button fx:id="btn_usun_choroby" layoutX="50.0" layoutY="400.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="220.0" text="Usuń" />
+                        <Button fx:id="btn_wczytaj_choroby" layoutX="50.0" layoutY="280.0" mnemonicParsing="false" onAction="#wczytajChoroby" prefHeight="25.0" prefWidth="220.0" text="Wczytaj" />
+                        <Button fx:id="btn_dodaj_choroby" layoutX="50.0" layoutY="320.0" mnemonicParsing="false" onAction="#dodajChorobe" prefWidth="220.0" text="Dodaj" />
+                        <Button fx:id="btn_zmodyfikuj_choroby" layoutX="50.0" layoutY="360.0" mnemonicParsing="false" onAction="#modyfikujChorobe" prefHeight="25.0" prefWidth="220.0" text="Zmodyfikuj" />
+                        <Button fx:id="btn_usun_choroby" layoutX="50.0" layoutY="400.0" mnemonicParsing="false" onAction="#usunChorobe" prefHeight="25.0" prefWidth="220.0" text="Usuń" />
                      </children></AnchorPane>
               </content>
             </Tab>
@@ -151,10 +151,10 @@
                         <TextField layoutX="120.0" layoutY="43.0" prefHeight="0.0" prefWidth="150.0" />
                         <TextField layoutX="120.0" layoutY="83.0" prefHeight="0.0" prefWidth="150.0" />
                         <TextField layoutX="120.0" layoutY="123.0" prefHeight="0.0" prefWidth="150.0" />
-                        <Button fx:id="btn_wczytaj_lekarstwa" layoutX="50.0" layoutY="280.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="220.0" text="Wczytaj" />
-                        <Button fx:id="btn_dodaj_lekarstwa" layoutX="50.0" layoutY="320.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="220.0" text="Dodaj" />
-                        <Button fx:id="btn_zmodyfikuj_lekarstwa" layoutX="50.0" layoutY="360.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="220.0" text="Zmodyfikuj" />
-                        <Button fx:id="btn_usun_lekarstwa" layoutX="50.0" layoutY="400.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="220.0" text="Usuń" />
+                        <Button fx:id="btn_wczytaj_lekarstwa" layoutX="50.0" layoutY="280.0" mnemonicParsing="false" onAction="#wczytajLeki" prefHeight="25.0" prefWidth="220.0" text="Wczytaj" />
+                        <Button fx:id="btn_dodaj_lekarstwa" layoutX="50.0" layoutY="320.0" mnemonicParsing="false" onAction="#dodajLek" prefHeight="25.0" prefWidth="220.0" text="Dodaj" />
+                        <Button fx:id="btn_zmodyfikuj_lekarstwa" layoutX="50.0" layoutY="360.0" mnemonicParsing="false" onAction="#modyfikujLek" prefHeight="25.0" prefWidth="220.0" text="Zmodyfikuj" />
+                        <Button fx:id="btn_usun_lekarstwa" layoutX="50.0" layoutY="400.0" mnemonicParsing="false" onAction="#usunLek" prefHeight="25.0" prefWidth="220.0" text="Usuń" />
                      </children></AnchorPane>
               </content>
             </Tab>

@@ -14,7 +14,9 @@ import javax.persistence.Persistence;
 
 
 public class MainApp extends Application {
-
+    
+    public static EntityManager entityManager;  //zmienna na użytek metod w FXMLController
+    
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/Scene.fxml"));
@@ -26,20 +28,20 @@ public class MainApp extends Application {
         stage.setScene(scene);
         stage.show();
 
-       /* EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("Przychodnia");
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("Przychodnia");
+        entityManager = entityManagerFactory.createEntityManager();
 
-       /* Pacjent pacjent = new Pacjent();
+        Pacjent pacjent = new Pacjent();
         pacjent.setImie("Jan");
         pacjent.setNazwisko("Nowak");
-        pacjent.setPesel(98041700032L);*/
+        pacjent.setPesel(98041700032L);
 
-        /*entityManager.getTransaction().begin();
+        entityManager.getTransaction().begin();
         entityManager.persist(pacjent);
-        entityManager.getTransaction().commit();*/
-/*
+        entityManager.getTransaction().commit();
+ 
         entityManager.close();
-        entityManagerFactory.close();*/
+        entityManagerFactory.close();
     }
 
     /**

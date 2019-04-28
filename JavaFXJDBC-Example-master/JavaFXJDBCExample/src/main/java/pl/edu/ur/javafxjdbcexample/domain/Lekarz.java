@@ -1,5 +1,6 @@
 package pl.edu.ur.javafxjdbcexample.domain;
 
+import java.util.List;
 import javax.persistence.*;
 
 @Entity
@@ -13,11 +14,13 @@ public class Lekarz {
     @Column(name = "nazwisko")
     private String nazwisko;
     @Column(name = "pesel",nullable = false, length = 11)
-    private int pesel;
+    private long pesel;
     @Column(name = "specjalizacja")
     private String specjalizacja;
     @Column(name = "zarobki")
     private double zarobki;
+    @OneToMany(mappedBy = "lekarz")
+    private List<Porada> porady;
 
     public int getId_lekarza() {
         return id_lekarza;
@@ -31,7 +34,7 @@ public class Lekarz {
         return nazwisko;
     }
 
-    public int getPesel() {
+    public long getPesel() {
         return pesel;
     }
 
@@ -55,7 +58,7 @@ public class Lekarz {
         this.nazwisko = nazwisko;
     }
 
-    public void setPesel(int pesel) {
+    public void setPesel(long pesel) {
         this.pesel = pesel;
     }
 
