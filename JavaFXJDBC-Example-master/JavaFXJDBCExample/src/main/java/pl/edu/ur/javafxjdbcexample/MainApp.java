@@ -30,7 +30,7 @@ public class MainApp extends Application {
 
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("Przychodnia");
         entityManager = entityManagerFactory.createEntityManager();
-
+/*
         Pacjent pacjent = new Pacjent();
         pacjent.setImie("Jan");
         pacjent.setNazwisko("Nowak");
@@ -38,10 +38,10 @@ public class MainApp extends Application {
 
         entityManager.getTransaction().begin();
         entityManager.persist(pacjent);
-        entityManager.getTransaction().commit();
+        entityManager.getTransaction().commit();*/
  
-        entityManager.close();
-        entityManagerFactory.close();
+        //entityManager.close();
+        //entityManagerFactory.close();
     }
 
     /**

@@ -1,8 +1,8 @@
-C:\Users\Wojciech\Documents\NetBeansProjects\projectdb-bury_burghardt\JavaFXJDBC-Example-master\JavaFXJDBCExample\src\main\java\pl\edu\ur\javafxjdbcexample\FXMLController.java
-C:\Users\Wojciech\Documents\NetBeansProjects\projectdb-bury_burghardt\JavaFXJDBC-Example-master\JavaFXJDBCExample\src\main\java\pl\edu\ur\javafxjdbcexample\domain\Pacjent.java
-C:\Users\Wojciech\Documents\NetBeansProjects\projectdb-bury_burghardt\JavaFXJDBC-Example-master\JavaFXJDBCExample\src\main\java\pl\edu\ur\javafxjdbcexample\database\DatabaseHelper.java
-C:\Users\Wojciech\Documents\NetBeansProjects\projectdb-bury_burghardt\JavaFXJDBC-Example-master\JavaFXJDBCExample\src\main\java\pl\edu\ur\javafxjdbcexample\MainApp.java
-C:\Users\Wojciech\Documents\NetBeansProjects\projectdb-bury_burghardt\JavaFXJDBC-Example-master\JavaFXJDBCExample\src\main\java\pl\edu\ur\javafxjdbcexample\domain\Porada.java
-C:\Users\Wojciech\Documents\NetBeansProjects\projectdb-bury_burghardt\JavaFXJDBC-Example-master\JavaFXJDBCExample\src\main\java\pl\edu\ur\javafxjdbcexample\domain\Lekarz.java
-C:\Users\Wojciech\Documents\NetBeansProjects\projectdb-bury_burghardt\JavaFXJDBC-Example-master\JavaFXJDBCExample\src\main\java\pl\edu\ur\javafxjdbcexample\domain\Lek.java
-C:\Users\Wojciech\Documents\NetBeansProjects\projectdb-bury_burghardt\JavaFXJDBC-Example-master\JavaFXJDBCExample\src\main\java\pl\edu\ur\javafxjdbcexample\domain\Choroba.java
+C:\Users\student\Documents\NetBeansProjects\d1\projectdb-bury_burghardt\JavaFXJDBC-Example-master\JavaFXJDBCExample\src\main\java\pl\edu\ur\javafxjdbcexample\domain\Lek.java
+C:\Users\student\Documents\NetBeansProjects\d1\projectdb-bury_burghardt\JavaFXJDBC-Example-master\JavaFXJDBCExample\src\main\java\pl\edu\ur\javafxjdbcexample\domain\Pacjent.java
+C:\Users\student\Documents\NetBeansProjects\d1\projectdb-bury_burghardt\JavaFXJDBC-Example-master\JavaFXJDBCExample\src\main\java\pl\edu\ur\javafxjdbcexample\domain\Choroba.java
+C:\Users\student\Documents\NetBeansProjects\d1\projectdb-bury_burghardt\JavaFXJDBC-Example-master\JavaFXJDBCExample\src\main\java\pl\edu\ur\javafxjdbcexample\domain\Lekarz.java
+C:\Users\student\Documents\NetBeansProjects\d1\projectdb-bury_burghardt\JavaFXJDBC-Example-master\JavaFXJDBCExample\src\main\java\pl\edu\ur\javafxjdbcexample\MainApp.java
+C:\Users\student\Documents\NetBeansProjects\d1\projectdb-bury_burghardt\JavaFXJDBC-Example-master\JavaFXJDBCExample\src\main\java\pl\edu\ur\javafxjdbcexample\domain\Porada.java
+C:\Users\student\Documents\NetBeansProjects\d1\projectdb-bury_burghardt\JavaFXJDBC-Example-master\JavaFXJDBCExample\src\main\java\pl\edu\ur\javafxjdbcexample\database\DatabaseHelper.java
+C:\Users\student\Documents\NetBeansProjects\d1\projectdb-bury_burghardt\JavaFXJDBC-Example-master\JavaFXJDBCExample\src\main\java\pl\edu\ur\javafxjdbcexample\FXMLController.java
