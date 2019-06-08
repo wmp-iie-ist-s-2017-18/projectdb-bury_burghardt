@@ -97,6 +97,18 @@ public class FXMLController implements Initializable {
     @FXML
     private TextField tf_lek_daw;
     @FXML
+    private TableView<PokaPorada> tbe_porady;
+    @FXML
+    private TableColumn kol_por_id;
+    @FXML
+    private TableColumn kol_por_data;
+    @FXML
+    private TableColumn kol_por_godz;
+    @FXML
+    private TableColumn kol_por_pac;
+    @FXML
+    private TableColumn kol_por_lekarz;
+    @FXML
     private Button btn_wczytaj_porady;
     @FXML
     private Button btn_dodaj_porady;
@@ -104,8 +116,6 @@ public class FXMLController implements Initializable {
     private Button btn_zmodyfikuj_porady;
     @FXML
     private Button btn_usun_porady;
-    @FXML
-    private TableView<?> tbe_porady;
     @FXML
     private TableView<PokaPacjent> tbe_pacjenci;
     @FXML
@@ -210,6 +220,19 @@ public class FXMLController implements Initializable {
     
     @FXML
     void wczytajPorady(ActionEvent event) throws SQLException {
+        TypedQuery<Porada> query = MainApp.entityManager.createQuery("select p from Porada p", Porada.class);   
+        List<Porada> porady = query.getResultList();
+        pokaPorady.clear();
+        porady.forEach((porada) -> {
+            pokaPorady.add(new PokaPorada(porada.getId_porady(),porada.getData(),porada.getGodzina(),porada.getPacjent().getId_pacjenta(),porada.getLekarz().getId_lekarza()));
+        });
+        for (PokaPorada porada : pokaPorady) {
+            System.out.println(porada.getId());
+            System.out.println(porada.getData());
+            System.out.println(porada.getGodzina());
+            System.out.println(porada.getIdPacjenta());
+            System.out.println(porada.getIdLekarza());
+        }
         
     }
     
@@ -220,8 +243,8 @@ public class FXMLController implements Initializable {
         Pacjent pacjent = MainApp.entityManager.find(Pacjent.class, Integer.parseInt(tf_por_pac.getText()));
         
         Porada porada = new Porada();
-        //porada.setData(LocalDate.MAX);//pobrać z tf_por_data.getText()
-       // porada.setGodzina(LocalTime.MIN);//pobrać z tf_por_godz.getText()
+        porada.setData(tf_por_data.getText());
+        porada.setGodzina(tf_por_godz.getText());
         porada.setLekarz(lekarz);
         porada.setPacjent(pacjent);
         
@@ -237,8 +260,8 @@ public class FXMLController implements Initializable {
             Pacjent pacjent = MainApp.entityManager.find(Pacjent.class, Integer.parseInt(tf_por_pac.getText()));
         
             Porada porada = MainApp.entityManager.find(Porada.class, Integer.parseInt(tf_por_id.getText()));//1 to ex. id
-            //porada.setData(LocalDate.MAX);//pobrać z tf_por_data.getText()
-           // porada.setGodzina(LocalTime.MIN);//pobrać z tf_por_godz.getText()
+            porada.setData(tf_por_data.getText());
+            porada.setGodzina(tf_por_godz.getText());
             porada.setLekarz(lekarz);
             porada.setPacjent(pacjent);
         } catch (NumberFormatException ef) {
@@ -500,6 +523,14 @@ public class FXMLController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        kol_por_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        kol_por_data.setCellValueFactory(new PropertyValueFactory<>("data"));
+        kol_por_godz.setCellValueFactory(new PropertyValueFactory<>("godzina"));
+        kol_por_pac.setCellValueFactory(new PropertyValueFactory<>("idPacjenta"));
+        kol_por_lekarz.setCellValueFactory(new PropertyValueFactory<>("idLekarza"));
+        
+        tbe_porady.setItems(pokaPorady);
+        
         kol_pac_id.setCellValueFactory(new PropertyValueFactory<>("id"));
         kol_pac_imie.setCellValueFactory(new PropertyValueFactory<>("imie"));
         kol_pac_naz.setCellValueFactory(new PropertyValueFactory<>("nazwisko"));
