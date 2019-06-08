@@ -30,28 +30,21 @@ import javafx.util.Callback;
 import pl.edu.ur.javafxjdbcexample.database.DatabaseHelper;
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javax.persistence.TypedQuery;
-import static pl.edu.ur.javafxjdbcexample.MainApp.entityManager;
 import pl.edu.ur.javafxjdbcexample.domain.Pacjent;
 import pl.edu.ur.javafxjdbcexample.domain.Choroba;
 import pl.edu.ur.javafxjdbcexample.domain.Lek;
 import pl.edu.ur.javafxjdbcexample.domain.Lekarz;
 import pl.edu.ur.javafxjdbcexample.domain.Porada;
 import pl.edu.ur.javafxjdbcexample.observabledata.PokaChoroba;
+import pl.edu.ur.javafxjdbcexample.observabledata.PokaLek;
+import pl.edu.ur.javafxjdbcexample.observabledata.PokaLekarz;
+import pl.edu.ur.javafxjdbcexample.observabledata.PokaPacjent;
+import pl.edu.ur.javafxjdbcexample.observabledata.PokaPorada;
+import pl.edu.ur.javafxjdbcexample.observabledata.PokaWynik;
 
 public class FXMLController implements Initializable {
-    
-    @FXML
-    private Label label;
-    
-    @FXML
-    private Button loadButton;
-    
-    @FXML
-    private Button cleanButton;
-    
-    @FXML
-    private Button executeButton;
     
     @FXML
     private TextArea sqlQuery;
@@ -114,7 +107,15 @@ public class FXMLController implements Initializable {
     @FXML
     private TableView<?> tbe_porady;
     @FXML
-    private TableView<?> tbe_pacjenci;
+    private TableView<PokaPacjent> tbe_pacjenci;
+    @FXML
+    private TableColumn kol_pac_id;
+    @FXML
+    private TableColumn kol_pac_imie;
+    @FXML
+    private TableColumn kol_pac_naz;
+    @FXML
+    private TableColumn kol_pac_pesel;
     @FXML
     private Button btn_wczytaj_pacjenci;
     @FXML
@@ -124,7 +125,19 @@ public class FXMLController implements Initializable {
     @FXML
     private Button btn_usun_pacjenci;
     @FXML
-    private TableView<?> tbe_lekarze;
+    private TableView<PokaLekarz> tbe_lekarze;
+    @FXML
+    private TableColumn kol_lekarz_id;
+    @FXML
+    private TableColumn kol_lekarz_imie;
+    @FXML
+    private TableColumn kol_lekarz_naz;
+    @FXML
+    private TableColumn kol_lekarz_pesel;
+    @FXML
+    private TableColumn kol_lekarz_spec;
+    @FXML
+    private TableColumn kol_lekarz_zar;
     @FXML
     private Button btn_wczytaj_lekarze;
     @FXML
@@ -136,11 +149,11 @@ public class FXMLController implements Initializable {
     @FXML
     private TableView<PokaChoroba> tbe_choroby;
     @FXML
-    private TableColumn<PokaChoroba,Number> kol_cho_id;
+    private TableColumn kol_cho_id;
     @FXML
-    private TableColumn<PokaChoroba,String> kol_cho_nazwa;
+    private TableColumn kol_cho_nazwa;
     @FXML
-    private TableColumn<PokaChoroba,String> kol_cho_typ;
+    private TableColumn kol_cho_typ;
     @FXML
     private Button btn_wczytaj_choroby;
     @FXML
@@ -150,7 +163,13 @@ public class FXMLController implements Initializable {
     @FXML
     private Button btn_usun_choroby;
     @FXML
-    private TableView<?> tbe_lekarstwa;
+    private TableView<PokaLek> tbe_lekarstwa;
+    @FXML
+    private TableColumn kol_lek_id;
+    @FXML
+    private TableColumn kol_lek_nazwa;
+    @FXML
+    private TableColumn kol_lek_dawka;
     @FXML
     private Button btn_wczytaj_lekarstwa;
     @FXML
@@ -168,7 +187,7 @@ public class FXMLController implements Initializable {
     @FXML
     private Button btn_usun_porada;
     @FXML
-    private TableView<?> tbe_pacjent;
+    private TableView tbe_pacjent;
     @FXML
     private TextField tf_pac_wie;
     @FXML
@@ -179,6 +198,15 @@ public class FXMLController implements Initializable {
     private Button btn_zmodyfikuj_pacjent;
     @FXML
     private Button btn_usun_pacjent;
+    
+    private final ObservableList<PokaWynik> pokaWynik = FXCollections.observableArrayList();
+    private final ObservableList<PokaPorada> pokaPorady = FXCollections.observableArrayList();
+    private final ObservableList<PokaPacjent> pokaPacjenci = FXCollections.observableArrayList();
+    private final ObservableList<PokaLekarz> pokaLekarze = FXCollections.observableArrayList();
+    private final ObservableList<PokaLek> pokaLeki = FXCollections.observableArrayList();
+    private final ObservableList<PokaChoroba> pokaChoroby = FXCollections.observableArrayList();
+    private final ObservableList<PokaLek> pokaLeki2 = FXCollections.observableArrayList();
+    private final ObservableList<PokaChoroba> pokaChoroby2 = FXCollections.observableArrayList();
     
     @FXML
     void wczytajPorady(ActionEvent event) throws SQLException {
@@ -192,12 +220,12 @@ public class FXMLController implements Initializable {
         Pacjent pacjent = MainApp.entityManager.find(Pacjent.class, Integer.parseInt(tf_por_pac.getText()));
         
         Porada porada = new Porada();
-        porada.setData(LocalDate.MAX);//pobrać z tf_por_data.getText()
-        porada.setGodzina(LocalTime.MIN);//pobrać z tf_por_godz.getText()
+        //porada.setData(LocalDate.MAX);//pobrać z tf_por_data.getText()
+       // porada.setGodzina(LocalTime.MIN);//pobrać z tf_por_godz.getText()
         porada.setLekarz(lekarz);
         porada.setPacjent(pacjent);
         
-        MainApp.entityManager.persist(pacjent);
+        MainApp.entityManager.persist(porada);
         MainApp.entityManager.getTransaction().commit();
     }
     
@@ -209,8 +237,8 @@ public class FXMLController implements Initializable {
             Pacjent pacjent = MainApp.entityManager.find(Pacjent.class, Integer.parseInt(tf_por_pac.getText()));
         
             Porada porada = MainApp.entityManager.find(Porada.class, Integer.parseInt(tf_por_id.getText()));//1 to ex. id
-            porada.setData(LocalDate.MAX);//pobrać z tf_por_data.getText()
-            porada.setGodzina(LocalTime.MIN);//pobrać z tf_por_godz.getText()
+            //porada.setData(LocalDate.MAX);//pobrać z tf_por_data.getText()
+           // porada.setGodzina(LocalTime.MIN);//pobrać z tf_por_godz.getText()
             porada.setLekarz(lekarz);
             porada.setPacjent(pacjent);
         } catch (NumberFormatException ef) {
@@ -233,7 +261,12 @@ public class FXMLController implements Initializable {
     
     @FXML
     void wczytajPacjentow(ActionEvent event) throws SQLException {
-        
+        TypedQuery<Pacjent> query = MainApp.entityManager.createQuery("select p from Pacjent p", Pacjent.class);   
+        List<Pacjent> pacjenci = query.getResultList();
+        pokaPacjenci.clear();
+        pacjenci.forEach((pacjent) -> {
+            pokaPacjenci.add(new PokaPacjent(pacjent.getId_pacjenta(),pacjent.getImie(),pacjent.getNazwisko(),pacjent.getPesel()));
+        });
     }
     
     @FXML
@@ -276,7 +309,12 @@ public class FXMLController implements Initializable {
     
     @FXML
     void wczytajLekarzy(ActionEvent event) throws SQLException {
-        
+        TypedQuery<Lekarz> query = MainApp.entityManager.createQuery("select l from Lekarz l", Lekarz.class);   
+        List<Lekarz> lekarze = query.getResultList();
+        pokaLekarze.clear();
+        lekarze.forEach((lekarz) -> {
+            pokaLekarze.add(new PokaLekarz(lekarz.getId_lekarza(),lekarz.getImie(),lekarz.getNazwisko(),lekarz.getPesel(),lekarz.getSpecjalizacja(),lekarz.getZarobki()));
+        });
     }
     
     @FXML
@@ -323,7 +361,12 @@ public class FXMLController implements Initializable {
     
     @FXML
     void wczytajLeki(ActionEvent event) throws SQLException {
-        
+        TypedQuery<Lek> query = MainApp.entityManager.createQuery("select l from Lek l", Lek.class);   
+        List<Lek> leki = query.getResultList();
+        pokaLeki.clear();
+        leki.forEach((lek) -> {
+            pokaLeki.add(new PokaLek(lek.getId_leku(),lek.getNazwa(),lek.getDawka()));
+        });
     }
     
     @FXML
@@ -367,22 +410,12 @@ public class FXMLController implements Initializable {
     void wczytajChoroby(ActionEvent event) throws SQLException {
         TypedQuery<Choroba> query = MainApp.entityManager.createQuery("select c from Choroba c", Choroba.class);   
         List<Choroba> choroby = query.getResultList();
-        ObservableList<PokaChoroba> pokaChoroby = FXCollections.observableArrayList();
+        pokaChoroby.clear();
         choroby.forEach((choroba) -> {
             pokaChoroby.add(new PokaChoroba(choroba.getId_choroby(),choroba.getNazwa(),choroba.getTyp()));
         });
-        cleanTable(tbe_choroby);
-      //  tbe_choroby.setItems(pokaChoroby);
-        tbe_choroby.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        
-        kol_cho_id.setCellValueFactory(cell -> cell.getValue().getIdProperty());
-        kol_cho_nazwa.setCellValueFactory(cell -> cell.getValue().getNazwaProperty());
-        kol_cho_typ.setCellValueFactory(cell -> cell.getValue().getTypProperty());
-        
-        tbe_choroby.setItems(pokaChoroby);
-        //tbe_choroby.getColumns().addAll(kol_cho_id,kol_cho_nazwa,kol_cho_typ);
-        for (Choroba choroba : choroby) {
-            System.out.println(choroba.getId_choroby());
+        for (PokaChoroba choroba : pokaChoroby) {
+            System.out.println(choroba.getId());
             System.out.println(choroba.getNazwa());
             System.out.println(choroba.getTyp());
         }
@@ -467,6 +500,33 @@ public class FXMLController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        kol_pac_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        kol_pac_imie.setCellValueFactory(new PropertyValueFactory<>("imie"));
+        kol_pac_naz.setCellValueFactory(new PropertyValueFactory<>("nazwisko"));
+        kol_pac_pesel.setCellValueFactory(new PropertyValueFactory<>("pesel"));
+        
+        tbe_pacjenci.setItems(pokaPacjenci);
+        
+        kol_lekarz_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        kol_lekarz_imie.setCellValueFactory(new PropertyValueFactory<>("imie"));
+        kol_lekarz_naz.setCellValueFactory(new PropertyValueFactory<>("nazwisko"));
+        kol_lekarz_pesel.setCellValueFactory(new PropertyValueFactory<>("pesel"));
+        kol_lekarz_spec.setCellValueFactory(new PropertyValueFactory<>("specjalizacja"));
+        kol_lekarz_zar.setCellValueFactory(new PropertyValueFactory<>("zarobki"));
+        
+        tbe_lekarze.setItems(pokaLekarze);
+        
+        kol_cho_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        kol_cho_nazwa.setCellValueFactory(new PropertyValueFactory<>("nazwa"));
+        kol_cho_typ.setCellValueFactory(new PropertyValueFactory<>("typ"));
+        
+        tbe_choroby.setItems(pokaChoroby);
+        
+        kol_lek_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        kol_lek_nazwa.setCellValueFactory(new PropertyValueFactory<>("nazwa"));
+        kol_lek_dawka.setCellValueFactory(new PropertyValueFactory<>("dawka"));
+        
+        tbe_lekarstwa.setItems(pokaLeki);
     }
     
     public void loadData(ResultSet rs) throws SQLException {
