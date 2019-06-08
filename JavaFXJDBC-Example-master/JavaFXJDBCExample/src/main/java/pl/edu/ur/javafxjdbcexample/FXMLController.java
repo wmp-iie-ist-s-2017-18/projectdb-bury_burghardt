@@ -520,6 +520,106 @@ public class FXMLController implements Initializable {
         conn.close();
     }
     
+    @FXML
+    void autoWypelnianie(ActionEvent event) {
+        Pacjent pacjent = new Pacjent();
+        pacjent.setImie("Zygmunt");
+        pacjent.setNazwisko("Szymański");
+        pacjent.setPesel(35011358719L);
+        MainApp.entityManager.getTransaction().begin();
+        MainApp.entityManager.persist(pacjent);
+        MainApp.entityManager.getTransaction().commit();
+        
+        Pacjent pacjent2 = new Pacjent();
+        pacjent2.setImie("Weronika");
+        pacjent2.setNazwisko("Woźniak");
+        pacjent2.setPesel(75030269522L);
+        MainApp.entityManager.getTransaction().begin();
+        MainApp.entityManager.persist(pacjent2);
+        MainApp.entityManager.getTransaction().commit();
+        
+        Pacjent pacjent3 = new Pacjent();
+        pacjent3.setImie("Eustachy");
+        pacjent3.setNazwisko("Kozłowski");
+        pacjent3.setPesel(10282687211L);
+        MainApp.entityManager.getTransaction().begin();
+        MainApp.entityManager.persist(pacjent3);
+        MainApp.entityManager.getTransaction().commit();
+        
+        Lekarz lekarz = new Lekarz();
+        lekarz.setImie("Celina");
+        lekarz.setNazwisko("Borkowska");
+        lekarz.setPesel(74060803822L);
+        lekarz.setSpecjalizacja("Dermatolog");
+        lekarz.setZarobki(3800);
+        MainApp.entityManager.getTransaction().begin();
+        MainApp.entityManager.persist(lekarz);
+        MainApp.entityManager.getTransaction().commit();
+        
+        Lekarz lekarz2 = new Lekarz();
+        lekarz2.setImie("Lesław");
+        lekarz2.setNazwisko("Dąbrowski");
+        lekarz2.setPesel(57102707936L);
+        lekarz2.setSpecjalizacja("Neurolog");
+        lekarz2.setZarobki(4100);
+        MainApp.entityManager.getTransaction().begin();
+        MainApp.entityManager.persist(lekarz2);
+        MainApp.entityManager.getTransaction().commit();
+        
+                
+        Choroba choroba = new Choroba();
+        choroba.setNazwa("Grzybica");
+        choroba.setTyp("skórne");
+        MainApp.entityManager.getTransaction().begin();
+        MainApp.entityManager.persist(choroba);
+        MainApp.entityManager.getTransaction().commit();
+        
+        Choroba choroba2 = new Choroba();
+        choroba2.setNazwa("Miastenia");
+        choroba2.setTyp("autoimmunologiczne");
+        MainApp.entityManager.getTransaction().begin();
+        MainApp.entityManager.persist(choroba2);
+        MainApp.entityManager.getTransaction().commit();
+        
+        Lek lek = new Lek();
+        lek.setDawka(250);
+        lek.setNazwa("Atratex");
+        MainApp.entityManager.getTransaction().begin();
+        MainApp.entityManager.persist(lek);
+        MainApp.entityManager.getTransaction().commit();
+        
+        MainApp.entityManager.getTransaction().begin();       
+        Porada porada = new Porada();
+        porada.setData("09/05/2019");
+        porada.setGodzina("11:00");
+        porada.setLekarz(lekarz);
+        porada.setPacjent(pacjent);
+        porada.getChoroby().add(MainApp.entityManager.find(Choroba.class, 6));
+        porada.getLeki().add(MainApp.entityManager.find(Lek.class, 8));
+        MainApp.entityManager.persist(porada);
+        MainApp.entityManager.getTransaction().commit();
+        
+        MainApp.entityManager.getTransaction().begin();       
+        Porada porada2 = new Porada();
+        porada2.setData("25/04/2019");
+        porada2.setGodzina("10:30");
+        porada2.setLekarz(lekarz2);
+        porada2.setPacjent(pacjent2);
+        porada2.getChoroby().add(MainApp.entityManager.find(Choroba.class, 7));
+        MainApp.entityManager.persist(porada2);
+        MainApp.entityManager.getTransaction().commit();
+        
+        MainApp.entityManager.getTransaction().begin();       
+        Porada porada3 = new Porada();
+        porada3.setData("27/06/2019");
+        porada3.setGodzina("8:45");
+        porada3.setLekarz(lekarz);
+        porada3.setPacjent(pacjent3);
+        porada3.getChoroby().add(MainApp.entityManager.find(Choroba.class, 6));
+        MainApp.entityManager.persist(porada3);
+        MainApp.entityManager.getTransaction().commit();
+    }
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
