@@ -97,6 +97,14 @@ public class FXMLController implements Initializable {
     @FXML
     private TextField tf_lek_daw;
     @FXML
+    private TextField tf_por2_id;
+    @FXML
+    private TextField tf_por_cho_id;
+    @FXML
+    private TextField tf_por_lek_id;
+    @FXML
+    private TextField tf_wysz_id;
+    @FXML
     private TableView<PokaPorada> tbe_porady;
     @FXML
     private TableColumn kol_por_id;
@@ -109,14 +117,6 @@ public class FXMLController implements Initializable {
     @FXML
     private TableColumn kol_por_lekarz;
     @FXML
-    private Button btn_wczytaj_porady;
-    @FXML
-    private Button btn_dodaj_porady;
-    @FXML
-    private Button btn_zmodyfikuj_porady;
-    @FXML
-    private Button btn_usun_porady;
-    @FXML
     private TableView<PokaPacjent> tbe_pacjenci;
     @FXML
     private TableColumn kol_pac_id;
@@ -126,14 +126,6 @@ public class FXMLController implements Initializable {
     private TableColumn kol_pac_naz;
     @FXML
     private TableColumn kol_pac_pesel;
-    @FXML
-    private Button btn_wczytaj_pacjenci;
-    @FXML
-    private Button btn_dodaj_pacjenci;
-    @FXML
-    private Button btn_zmodyfikuj_pacjenci;
-    @FXML
-    private Button btn_usun_pacjenci;
     @FXML
     private TableView<PokaLekarz> tbe_lekarze;
     @FXML
@@ -149,14 +141,6 @@ public class FXMLController implements Initializable {
     @FXML
     private TableColumn kol_lekarz_zar;
     @FXML
-    private Button btn_wczytaj_lekarze;
-    @FXML
-    private Button btn_dodaj_lekarze;
-    @FXML
-    private Button btn_zmodyfikuj_lekarze;
-    @FXML
-    private Button btn_usun_lekarze;
-    @FXML
     private TableView<PokaChoroba> tbe_choroby;
     @FXML
     private TableColumn kol_cho_id;
@@ -164,14 +148,6 @@ public class FXMLController implements Initializable {
     private TableColumn kol_cho_nazwa;
     @FXML
     private TableColumn kol_cho_typ;
-    @FXML
-    private Button btn_wczytaj_choroby;
-    @FXML
-    private Button btn_dodaj_choroby;
-    @FXML
-    private Button btn_zmodyfikuj_choroby;
-    @FXML
-    private Button btn_usun_choroby;
     @FXML
     private TableView<PokaLek> tbe_lekarstwa;
     @FXML
@@ -181,33 +157,31 @@ public class FXMLController implements Initializable {
     @FXML
     private TableColumn kol_lek_dawka;
     @FXML
-    private Button btn_wczytaj_lekarstwa;
+    private TableView<PokaChoroba> tbe_choroby2;
     @FXML
-    private Button btn_dodaj_lekarstwa;
+    private TableColumn kol_cho_id2;
     @FXML
-    private Button btn_zmodyfikuj_lekarstwa;
+    private TableColumn kol_cho_nazwa2;
     @FXML
-    private Button btn_usun_lekarstwa;
+    private TableColumn kol_cho_typ2;
     @FXML
-    private Button btn_wczytaj_porada;
+    private TableView<PokaLek> tbe_lekarstwa2;
     @FXML
-    private Button btn_dodaj_porada;
+    private TableColumn kol_lek_id2;
     @FXML
-    private Button btn_zmodyfikuj_porada;
+    private TableColumn kol_lek_nazwa2;
     @FXML
-    private Button btn_usun_porada;
+    private TableColumn kol_lek_dawka2;
     @FXML
-    private TableView tbe_pacjent;
+    private TableView<PokaWynik> tbe_wynik;
     @FXML
-    private TextField tf_pac_wie;
+    private TableColumn kol_wynik_id;
     @FXML
-    private Button btn_wczytaj_pacjent;
+    private TableColumn kol_wynik_imie;
     @FXML
-    private Button btn_dodaj_pacjent;
+    private TableColumn kol_wynik_naz;
     @FXML
-    private Button btn_zmodyfikuj_pacjent;
-    @FXML
-    private Button btn_usun_pacjent;
+    private TableColumn kol_wynik_wiek;
     
     private final ObservableList<PokaWynik> pokaWynik = FXCollections.observableArrayList();
     private final ObservableList<PokaPorada> pokaPorady = FXCollections.observableArrayList();
@@ -479,6 +453,41 @@ public class FXMLController implements Initializable {
         }
         MainApp.entityManager.getTransaction().commit();
     }
+    
+    @FXML
+    void wczytajChorobyPorady(ActionEvent event) throws SQLException {
+    
+    }
+    
+    @FXML
+    void dodajChorobePorady(ActionEvent event) throws SQLException {
+ 
+    }
+    
+    @FXML
+    void usunChorobePorady(ActionEvent event) throws SQLException {
+  
+    }
+    
+    @FXML
+    void wczytajLekiPorady(ActionEvent event) throws SQLException {
+
+    }
+    
+    @FXML
+    void dodajLekPorady(ActionEvent event) throws SQLException {
+ 
+    }
+    
+    @FXML
+    void usunLekPorady(ActionEvent event) throws SQLException {
+        
+    }
+
+    @FXML
+    void wczytajWynik(ActionEvent event) throws SQLException {
+
+    }
     @FXML
     void LoadStudentsData(ActionEvent event) throws SQLException {
         
@@ -658,6 +667,25 @@ public class FXMLController implements Initializable {
         kol_lek_dawka.setCellValueFactory(new PropertyValueFactory<>("dawka"));
         
         tbe_lekarstwa.setItems(pokaLeki);
+        
+        kol_cho_id2.setCellValueFactory(new PropertyValueFactory<>("id"));
+        kol_cho_nazwa2.setCellValueFactory(new PropertyValueFactory<>("nazwa"));
+        kol_cho_typ2.setCellValueFactory(new PropertyValueFactory<>("typ"));
+        
+        tbe_choroby2.setItems(pokaChoroby2);
+        
+        kol_lek_id2.setCellValueFactory(new PropertyValueFactory<>("id"));
+        kol_lek_nazwa2.setCellValueFactory(new PropertyValueFactory<>("nazwa"));
+        kol_lek_dawka2.setCellValueFactory(new PropertyValueFactory<>("dawka"));
+        
+        tbe_lekarstwa2.setItems(pokaLeki2);
+        
+        kol_wynik_id.setCellValueFactory(new PropertyValueFactory<>("id"));
+        kol_wynik_imie.setCellValueFactory(new PropertyValueFactory<>("imie"));
+        kol_wynik_naz.setCellValueFactory(new PropertyValueFactory<>("nazwisko"));
+        kol_wynik_wiek.setCellValueFactory(new PropertyValueFactory<>("wiek"));
+        
+        tbe_pacjenci.setItems(pokaPacjenci);
     }
     
     public void loadData(ResultSet rs) throws SQLException {
