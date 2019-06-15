@@ -486,7 +486,21 @@ public class FXMLController implements Initializable {
     
     @FXML
     void usunChorobePorady(ActionEvent event) throws SQLException {
-  
+        MainApp.entityManager.getTransaction().begin();
+        try {
+            Porada porada = MainApp.entityManager.find(Porada.class, Integer.parseInt(tf_por2_id.getText()));//1 to ex. id
+            Choroba choroba = MainApp.entityManager.find(Choroba.class, Integer.parseInt(tf_por_cho_id.getText()));
+            List<Choroba> choroby = porada.getChoroby();
+            try {
+                choroby.remove(choroba);
+                porada.setChoroby(choroby);
+            } catch (Exception e) {
+                System.err.println("Lista pusta");
+            }  
+        } catch (NumberFormatException ef) {
+            System.err.println("Podaj id");
+        }
+        MainApp.entityManager.getTransaction().commit();
     }
     
     @FXML
@@ -511,7 +525,21 @@ public class FXMLController implements Initializable {
     
     @FXML
     void usunLekPorady(ActionEvent event) throws SQLException {
-        
+        MainApp.entityManager.getTransaction().begin();
+        try {
+            Porada porada = MainApp.entityManager.find(Porada.class, Integer.parseInt(tf_por2_id.getText()));//1 to ex. id
+            Lek lek = MainApp.entityManager.find(Lek.class, Integer.parseInt(tf_por_lek_id.getText()));
+            List<Lek> leki = porada.getLeki();
+            try {
+                leki.remove(lek);
+                porada.setLeki(leki);
+            } catch (Exception e) {
+                System.err.println("Lista pusta");
+            }  
+        } catch (NumberFormatException ef) {
+            System.err.println("Podaj id");
+        }
+        MainApp.entityManager.getTransaction().commit();
     }
 
     @FXML
