@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -603,8 +604,14 @@ public class FXMLController implements Initializable {
         porada.setGodzina("11:00");
         porada.setLekarz(lekarz);
         porada.setPacjent(pacjent);
-        porada.getChoroby().add(MainApp.entityManager.find(Choroba.class, 6));
-        porada.getLeki().add(MainApp.entityManager.find(Lek.class, 8));
+        List<Choroba> choroby = new ArrayList<>();
+        choroby.add(choroba);
+        porada.setChoroby(choroby);
+        List<Lek> leki = new ArrayList<>();
+        leki.add(lek);
+        porada.setLeki(leki);
+        //porada.getChoroby().add(MainApp.entityManager.find(Choroba.class, 6));
+        //porada.getLeki().add(MainApp.entityManager.find(Lek.class, 8));
         MainApp.entityManager.persist(porada);
         MainApp.entityManager.getTransaction().commit();
         
@@ -614,7 +621,10 @@ public class FXMLController implements Initializable {
         porada2.setGodzina("10:30");
         porada2.setLekarz(lekarz2);
         porada2.setPacjent(pacjent2);
-        porada2.getChoroby().add(MainApp.entityManager.find(Choroba.class, 7));
+        List<Choroba> choroby2 = new ArrayList<>();
+        choroby2.add(choroba2);
+        porada2.setChoroby(choroby2);
+        //porada2.getChoroby().add(MainApp.entityManager.find(Choroba.class, 7));
         MainApp.entityManager.persist(porada2);
         MainApp.entityManager.getTransaction().commit();
         
@@ -624,9 +634,22 @@ public class FXMLController implements Initializable {
         porada3.setGodzina("8:45");
         porada3.setLekarz(lekarz);
         porada3.setPacjent(pacjent3);
-        porada3.getChoroby().add(MainApp.entityManager.find(Choroba.class, 6));
+        List<Choroba> choroby3 = new ArrayList<>();
+        choroby3.add(choroba);
+        porada3.setChoroby(choroby3);
+        //porada3.getChoroby().add(MainApp.entityManager.find(Choroba.class, 6));
         MainApp.entityManager.persist(porada3);
         MainApp.entityManager.getTransaction().commit();
+        
+        //MainApp.entityManager.getTransaction().begin();
+        //Porada porada = MainApp.entityManager.find(Porada.class, 9);
+        //List<Choroba> choroby;
+        //choroby = new ArrayList<>();
+        //choroby.add(choroba2);
+        //choroba2.getPorady().add(porada2);
+        //porada2.setChoroby(choroby);
+        //MainApp.entityManager.persist(porada2);
+        //MainApp.entityManager.getTransaction().commit();
     }
     
     @Override
