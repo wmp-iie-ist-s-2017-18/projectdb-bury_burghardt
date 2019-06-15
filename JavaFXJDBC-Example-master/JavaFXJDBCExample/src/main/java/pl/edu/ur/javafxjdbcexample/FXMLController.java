@@ -201,14 +201,6 @@ public class FXMLController implements Initializable {
         porady.forEach((porada) -> {
             pokaPorady.add(new PokaPorada(porada.getId_porady(),porada.getData(),porada.getGodzina(),porada.getPacjent().getId_pacjenta(),porada.getLekarz().getId_lekarza()));
         });
-        for (PokaPorada porada : pokaPorady) {
-            System.out.println(porada.getId());
-            System.out.println(porada.getData());
-            System.out.println(porada.getGodzina());
-            System.out.println(porada.getIdPacjenta());
-            System.out.println(porada.getIdLekarza());
-        }
-        
     }
     
     @FXML
@@ -412,11 +404,6 @@ public class FXMLController implements Initializable {
         choroby.forEach((choroba) -> {
             pokaChoroby.add(new PokaChoroba(choroba.getId_choroby(),choroba.getNazwa(),choroba.getTyp()));
         });
-        for (PokaChoroba choroba : pokaChoroby) {
-            System.out.println(choroba.getId());
-            System.out.println(choroba.getNazwa());
-            System.out.println(choroba.getTyp());
-        }
     }
     
     @FXML
@@ -457,28 +444,44 @@ public class FXMLController implements Initializable {
     
     @FXML
     void wczytajTabelePorady(ActionEvent event) throws SQLException {
-        TypedQuery<Choroba> query = MainApp.entityManager.createQuery("select c from Choroba c", Choroba.class);   
+        try {
+            TypedQuery<Choroba> query = MainApp.entityManager.createQuery("select c from Choroba c join c.porady p where p.id_porady = :id", Choroba.class);   
+            query.setParameter("id", Integer.parseInt(tf_por2_id.getText()));
             List<Choroba> choroby = query.getResultList();
             pokaChoroby2.clear();
             choroby.forEach((choroba) -> {
                 pokaChoroby2.add(new PokaChoroba(choroba.getId_choroby(),choroba.getNazwa(),choroba.getTyp()));
             });
-            /*for (PokaChoroba choroba : pokaChoroby2) {
-                System.out.println(choroba.getId());
-                System.out.println(choroba.getNazwa());
-                System.out.println(choroba.getTyp());
-            }*/
-        TypedQuery<Lek> query2 = MainApp.entityManager.createQuery("select l from Lek l", Lek.class);   
-        List<Lek> leki = query2.getResultList();
-        pokaLeki2.clear();
-        leki.forEach((lek) -> {
-            pokaLeki2.add(new PokaLek(lek.getId_leku(),lek.getNazwa(),lek.getDawka()));
-        });    
+            TypedQuery<Lek> query2 = MainApp.entityManager.createQuery("select l from Lek l join l.porady p where p.id_porady = :id", Lek.class);   
+            query2.setParameter("id", Integer.parseInt(tf_por2_id.getText()));
+            List<Lek> leki = query2.getResultList();
+            pokaLeki2.clear();
+            leki.forEach((lek) -> {
+                pokaLeki2.add(new PokaLek(lek.getId_leku(),lek.getNazwa(),lek.getDawka()));
+            });
+        } catch (NumberFormatException ef) {
+            System.err.println("Podaj id");
+        }
     }
     
     @FXML
     void dodajChorobePorady(ActionEvent event) throws SQLException {
- 
+        MainApp.entityManager.getTransaction().begin();
+        try {
+            Porada porada = MainApp.entityManager.find(Porada.class, Integer.parseInt(tf_por2_id.getText()));//1 to ex. id
+            Choroba choroba = MainApp.entityManager.find(Choroba.class, Integer.parseInt(tf_por_cho_id.getText()));
+            List<Choroba> choroby = porada.getChoroby();
+            try {
+                choroby.add(choroba);
+            } catch (NullPointerException e) {
+                choroby = new ArrayList<>();
+                choroby.add(choroba);
+            }    
+            porada.setChoroby(choroby);
+        } catch (NumberFormatException ef) {
+            System.err.println("Podaj id");
+        }
+        MainApp.entityManager.getTransaction().commit();
     }
     
     @FXML
@@ -488,7 +491,22 @@ public class FXMLController implements Initializable {
     
     @FXML
     void dodajLekPorady(ActionEvent event) throws SQLException {
- 
+        MainApp.entityManager.getTransaction().begin();
+        try {
+            Porada porada = MainApp.entityManager.find(Porada.class, Integer.parseInt(tf_por2_id.getText()));//1 to ex. id
+            Lek lek = MainApp.entityManager.find(Lek.class, Integer.parseInt(tf_por_lek_id.getText()));
+            List<Lek> leki = porada.getLeki();
+            try {
+                leki.add(lek);
+            } catch (NullPointerException e) {
+                leki = new ArrayList<>();
+                leki.add(lek);
+            }
+            porada.setLeki(leki);
+        } catch (NumberFormatException ef) {
+            System.err.println("Podaj id");
+        }
+        MainApp.entityManager.getTransaction().commit();
     }
     
     @FXML
@@ -621,8 +639,6 @@ public class FXMLController implements Initializable {
         List<Lek> leki = new ArrayList<>();
         leki.add(lek);
         porada.setLeki(leki);
-        //porada.getChoroby().add(MainApp.entityManager.find(Choroba.class, 6));
-        //porada.getLeki().add(MainApp.entityManager.find(Lek.class, 8));
         MainApp.entityManager.persist(porada);
         MainApp.entityManager.getTransaction().commit();
         
@@ -635,7 +651,6 @@ public class FXMLController implements Initializable {
         List<Choroba> choroby2 = new ArrayList<>();
         choroby2.add(choroba2);
         porada2.setChoroby(choroby2);
-        //porada2.getChoroby().add(MainApp.entityManager.find(Choroba.class, 7));
         MainApp.entityManager.persist(porada2);
         MainApp.entityManager.getTransaction().commit();
         
@@ -648,7 +663,6 @@ public class FXMLController implements Initializable {
         List<Choroba> choroby3 = new ArrayList<>();
         choroby3.add(choroba);
         porada3.setChoroby(choroby3);
-        //porada3.getChoroby().add(MainApp.entityManager.find(Choroba.class, 6));
         MainApp.entityManager.persist(porada3);
         MainApp.entityManager.getTransaction().commit();
     }
