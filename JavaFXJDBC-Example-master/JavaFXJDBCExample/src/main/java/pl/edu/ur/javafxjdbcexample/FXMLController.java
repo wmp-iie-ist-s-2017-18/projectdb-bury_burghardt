@@ -456,8 +456,24 @@ public class FXMLController implements Initializable {
     }
     
     @FXML
-    void wczytajChorobyPorady(ActionEvent event) throws SQLException {
-    
+    void wczytajTabelePorady(ActionEvent event) throws SQLException {
+        TypedQuery<Choroba> query = MainApp.entityManager.createQuery("select c from Choroba c", Choroba.class);   
+            List<Choroba> choroby = query.getResultList();
+            pokaChoroby2.clear();
+            choroby.forEach((choroba) -> {
+                pokaChoroby2.add(new PokaChoroba(choroba.getId_choroby(),choroba.getNazwa(),choroba.getTyp()));
+            });
+            /*for (PokaChoroba choroba : pokaChoroby2) {
+                System.out.println(choroba.getId());
+                System.out.println(choroba.getNazwa());
+                System.out.println(choroba.getTyp());
+            }*/
+        TypedQuery<Lek> query2 = MainApp.entityManager.createQuery("select l from Lek l", Lek.class);   
+        List<Lek> leki = query2.getResultList();
+        pokaLeki2.clear();
+        leki.forEach((lek) -> {
+            pokaLeki2.add(new PokaLek(lek.getId_leku(),lek.getNazwa(),lek.getDawka()));
+        });    
     }
     
     @FXML
@@ -468,11 +484,6 @@ public class FXMLController implements Initializable {
     @FXML
     void usunChorobePorady(ActionEvent event) throws SQLException {
   
-    }
-    
-    @FXML
-    void wczytajLekiPorady(ActionEvent event) throws SQLException {
-
     }
     
     @FXML
@@ -640,16 +651,6 @@ public class FXMLController implements Initializable {
         //porada3.getChoroby().add(MainApp.entityManager.find(Choroba.class, 6));
         MainApp.entityManager.persist(porada3);
         MainApp.entityManager.getTransaction().commit();
-        
-        //MainApp.entityManager.getTransaction().begin();
-        //Porada porada = MainApp.entityManager.find(Porada.class, 9);
-        //List<Choroba> choroby;
-        //choroby = new ArrayList<>();
-        //choroby.add(choroba2);
-        //choroba2.getPorady().add(porada2);
-        //porada2.setChoroby(choroby);
-        //MainApp.entityManager.persist(porada2);
-        //MainApp.entityManager.getTransaction().commit();
     }
     
     @Override
