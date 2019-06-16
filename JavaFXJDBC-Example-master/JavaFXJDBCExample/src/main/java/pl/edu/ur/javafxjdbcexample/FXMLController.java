@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -32,6 +33,7 @@ import pl.edu.ur.javafxjdbcexample.database.DatabaseHelper;
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import pl.edu.ur.javafxjdbcexample.domain.Pacjent;
 import pl.edu.ur.javafxjdbcexample.domain.Choroba;
@@ -544,8 +546,19 @@ public class FXMLController implements Initializable {
 
     @FXML
     void wczytajWynik(ActionEvent event) throws SQLException {
-
+        Query query = MainApp.entityManager.createQuery("select p.id_pacjenta, p.imie, p.nazwisko, MOD(p.pesel,10) from Pacjent p");  
+        Iterator<?> iterator = query.getResultList().iterator();
+        pokaWynik.clear();
+        while (iterator.hasNext()) {
+            Object[] wynik = (Object[]) iterator.next();
+            Integer id = (Integer) wynik[0];
+            String imie = (String) wynik[1];
+            String nazwisko = (String) wynik[2];
+            Integer wiek = (Integer) wynik[3];
+            pokaWynik.add(new PokaWynik(id,imie,nazwisko,wiek));
+        }    
     }
+    
     @FXML
     void LoadStudentsData(ActionEvent event) throws SQLException {
         
@@ -751,7 +764,7 @@ public class FXMLController implements Initializable {
         kol_wynik_naz.setCellValueFactory(new PropertyValueFactory<>("nazwisko"));
         kol_wynik_wiek.setCellValueFactory(new PropertyValueFactory<>("wiek"));
         
-        tbe_pacjenci.setItems(pokaPacjenci);
+        tbe_wynik.setItems(pokaWynik);
     }
     
     public void loadData(ResultSet rs) throws SQLException {
