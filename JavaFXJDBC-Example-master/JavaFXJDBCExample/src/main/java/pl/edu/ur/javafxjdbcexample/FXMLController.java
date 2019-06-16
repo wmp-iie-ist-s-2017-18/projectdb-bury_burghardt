@@ -1,34 +1,19 @@
 package pl.edu.ur.javafxjdbcexample;
 
 import java.util.List;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ResourceBundle;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.util.Callback;
 import pl.edu.ur.javafxjdbcexample.database.DatabaseHelper;
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
@@ -48,15 +33,12 @@ import pl.edu.ur.javafxjdbcexample.observabledata.PokaPorada;
 import pl.edu.ur.javafxjdbcexample.observabledata.PokaWynik;
 
 public class FXMLController implements Initializable {
-    
-    @FXML
-    private TextArea sqlQuery;
-    
+      
     @FXML
     private TableView<ObservableList> tableView;
     
     DatabaseHelper dbHelper = new DatabaseHelper();
-    private ObservableList data = FXCollections.observableArrayList();
+    
     @FXML
     private TextField tf_por_id;
     @FXML
@@ -207,24 +189,28 @@ public class FXMLController implements Initializable {
     
     @FXML
     void dodajPorade(ActionEvent event) throws SQLException {
-        MainApp.entityManager.getTransaction().begin();
-        Lekarz lekarz = MainApp.entityManager.find(Lekarz.class, Integer.parseInt(tf_por_lek.getText()));
-        Pacjent pacjent = MainApp.entityManager.find(Pacjent.class, Integer.parseInt(tf_por_pac.getText()));
-        
-        Porada porada = new Porada();
-        porada.setData(tf_por_data.getText());
-        porada.setGodzina(tf_por_godz.getText());
-        porada.setLekarz(lekarz);
-        porada.setPacjent(pacjent);
-        
-        MainApp.entityManager.persist(porada);
-        MainApp.entityManager.getTransaction().commit();
+        try {
+            MainApp.entityManager.getTransaction().begin();
+            Lekarz lekarz = MainApp.entityManager.find(Lekarz.class, Integer.parseInt(tf_por_lek.getText()));
+            Pacjent pacjent = MainApp.entityManager.find(Pacjent.class, Integer.parseInt(tf_por_pac.getText()));
+
+            Porada porada = new Porada();
+            porada.setData(tf_por_data.getText());
+            porada.setGodzina(tf_por_godz.getText());
+            porada.setLekarz(lekarz);
+            porada.setPacjent(pacjent);
+
+            MainApp.entityManager.persist(porada);
+            MainApp.entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            showExceptionDialog("Wpisz dane");
+        }
     }
     
     @FXML 
-    void modyfikujPorade(ActionEvent event) throws SQLException {
-        MainApp.entityManager.getTransaction().begin();
+    void modyfikujPorade(ActionEvent event) throws SQLException {       
         try {
+            MainApp.entityManager.getTransaction().begin();
             Lekarz lekarz = MainApp.entityManager.find(Lekarz.class, Integer.parseInt(tf_por_lek.getText()));
             Pacjent pacjent = MainApp.entityManager.find(Pacjent.class, Integer.parseInt(tf_por_pac.getText()));
         
@@ -233,22 +219,22 @@ public class FXMLController implements Initializable {
             porada.setGodzina(tf_por_godz.getText());
             porada.setLekarz(lekarz);
             porada.setPacjent(pacjent);
+            MainApp.entityManager.getTransaction().commit();
         } catch (NumberFormatException ef) {
-            System.err.println("Podaj id");
-        }
-        MainApp.entityManager.getTransaction().commit();
+            showExceptionDialog("Podaj id");
+        }       
     }
     
     @FXML
-    void usunPorade(ActionEvent event) throws SQLException {
-        MainApp.entityManager.getTransaction().begin();
+    void usunPorade(ActionEvent event) throws SQLException {      
         try {
+            MainApp.entityManager.getTransaction().begin();
             Porada porada = MainApp.entityManager.find(Porada.class, Integer.parseInt(tf_por_id.getText()));
             MainApp.entityManager.remove(porada);
+            MainApp.entityManager.getTransaction().commit();
         } catch (NumberFormatException ef) {
-            System.err.println("Podaj id");
-        }
-        MainApp.entityManager.getTransaction().commit();
+            showExceptionDialog("Podaj id");
+        }      
     }
     
     @FXML
@@ -263,40 +249,44 @@ public class FXMLController implements Initializable {
     
     @FXML
     void dodajPacjenta(ActionEvent event) throws SQLException {
-        Pacjent pacjent = new Pacjent();
-        pacjent.setImie(tf_pac_im.getText());
-        pacjent.setNazwisko(tf_pac_naz.getText());
-        pacjent.setPesel(Long.parseLong(tf_pac_pes.getText()));
-        
-        MainApp.entityManager.getTransaction().begin();
-        MainApp.entityManager.persist(pacjent);
-        MainApp.entityManager.getTransaction().commit();
+        try {
+            Pacjent pacjent = new Pacjent();
+            pacjent.setImie(tf_pac_im.getText());
+            pacjent.setNazwisko(tf_pac_naz.getText());
+            pacjent.setPesel(Long.parseLong(tf_pac_pes.getText()));
+
+            MainApp.entityManager.getTransaction().begin();
+            MainApp.entityManager.persist(pacjent);
+            MainApp.entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            showExceptionDialog("Wpisz dane");
+        }
     }
     
     @FXML 
-    void modyfikujPacjenta(ActionEvent event) throws SQLException {
-        MainApp.entityManager.getTransaction().begin();
+    void modyfikujPacjenta(ActionEvent event) throws SQLException {        
         try {
+            MainApp.entityManager.getTransaction().begin();
             Pacjent pacjent = MainApp.entityManager.find(Pacjent.class, Integer.parseInt(tf_pac_id.getText()));
             pacjent.setImie(tf_pac_im.getText());
             pacjent.setNazwisko(tf_pac_naz.getText());
             pacjent.setPesel(Long.parseLong(tf_pac_pes.getText()));
+            MainApp.entityManager.getTransaction().commit();
         } catch (NumberFormatException ef) {
-            System.err.println("Podaj id");
-        }
-        MainApp.entityManager.getTransaction().commit();
+            showExceptionDialog("Podaj id");
+        }        
     }
     
     @FXML
-    void usunPacjenta(ActionEvent event) throws SQLException {
-        MainApp.entityManager.getTransaction().begin();
+    void usunPacjenta(ActionEvent event) throws SQLException {    
         try {
+            MainApp.entityManager.getTransaction().begin();
             Pacjent pacjent = MainApp.entityManager.find(Pacjent.class, Integer.parseInt(tf_pac_id.getText()));
             MainApp.entityManager.remove(pacjent);
+            MainApp.entityManager.getTransaction().commit();
         } catch (NumberFormatException ef) {
-            System.err.println("Podaj id");
-        }
-        MainApp.entityManager.getTransaction().commit();
+            showExceptionDialog("Podaj id");
+        }        
     }
     
     @FXML
@@ -311,44 +301,48 @@ public class FXMLController implements Initializable {
     
     @FXML
     void dodajLekarza(ActionEvent event) throws SQLException {
-        Lekarz lekarz = new Lekarz();
-        lekarz.setImie(tf_lekarz_im.getText());
-        lekarz.setNazwisko(tf_lekarz_naz.getText());
-        lekarz.setPesel(Long.parseLong(tf_lekarz_pes.getText()));
-        lekarz.setSpecjalizacja(tf_lekarz_spec.getText());
-        lekarz.setZarobki(Integer.parseInt(tf_lekarz_zar.getText()));
-        
-        MainApp.entityManager.getTransaction().begin();
-        MainApp.entityManager.persist(lekarz);
-        MainApp.entityManager.getTransaction().commit();
+        try { 
+            Lekarz lekarz = new Lekarz();
+            lekarz.setImie(tf_lekarz_im.getText());
+            lekarz.setNazwisko(tf_lekarz_naz.getText());
+            lekarz.setPesel(Long.parseLong(tf_lekarz_pes.getText()));
+            lekarz.setSpecjalizacja(tf_lekarz_spec.getText());
+            lekarz.setZarobki(Integer.parseInt(tf_lekarz_zar.getText()));
+
+            MainApp.entityManager.getTransaction().begin();
+            MainApp.entityManager.persist(lekarz);
+            MainApp.entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            showExceptionDialog("Wpisz dane");
+        }
     }
     
     @FXML 
-    void modyfikujLekarza(ActionEvent event) throws SQLException {
-        MainApp.entityManager.getTransaction().begin();
+    void modyfikujLekarza(ActionEvent event) throws SQLException {        
         try {
+            MainApp.entityManager.getTransaction().begin();
             Lekarz lekarz = MainApp.entityManager.find(Lekarz.class, Integer.parseInt(tf_lekarz_id.getText()));
             lekarz.setImie(tf_lekarz_im.getText());
             lekarz.setNazwisko(tf_lekarz_naz.getText());
             lekarz.setPesel(Long.parseLong(tf_lekarz_pes.getText()));
             lekarz.setSpecjalizacja(tf_lekarz_spec.getText());
             lekarz.setZarobki(Integer.parseInt(tf_lekarz_zar.getText()));
+            MainApp.entityManager.getTransaction().commit();
         } catch (NumberFormatException ef) {
-            System.err.println("Podaj id");
-        }
-        MainApp.entityManager.getTransaction().commit();
+            showExceptionDialog("Podaj id");
+        }       
     }
     
     @FXML
-    void usunLekarza(ActionEvent event) throws SQLException {
-        MainApp.entityManager.getTransaction().begin();
+    void usunLekarza(ActionEvent event) throws SQLException {        
         try {
+            MainApp.entityManager.getTransaction().begin();
             Lekarz lekarz = MainApp.entityManager.find(Lekarz.class, Integer.parseInt(tf_lekarz_id.getText()));
             MainApp.entityManager.remove(lekarz);
+            MainApp.entityManager.getTransaction().commit();
         } catch (NumberFormatException ef) {
-            System.err.println("Podaj id");
-        }
-        MainApp.entityManager.getTransaction().commit();
+            showExceptionDialog("Podaj id");
+        }       
     }
     
     @FXML
@@ -363,38 +357,42 @@ public class FXMLController implements Initializable {
     
     @FXML
     void dodajLek(ActionEvent event) throws SQLException {
-        Lek lek = new Lek();
-        lek.setDawka(Double.parseDouble(tf_lek_daw.getText()));
-        lek.setNazwa(tf_lek_naz.getText());
-        
-        MainApp.entityManager.getTransaction().begin();
-        MainApp.entityManager.persist(lek);
-        MainApp.entityManager.getTransaction().commit();
+        try {
+            Lek lek = new Lek();
+            lek.setDawka(Double.parseDouble(tf_lek_daw.getText()));
+            lek.setNazwa(tf_lek_naz.getText());
+
+            MainApp.entityManager.getTransaction().begin();
+            MainApp.entityManager.persist(lek);
+            MainApp.entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            showExceptionDialog("Wpisz dane");
+        }
     }
     
     @FXML 
-    void modyfikujLek(ActionEvent event) throws SQLException {
-        MainApp.entityManager.getTransaction().begin();
+    void modyfikujLek(ActionEvent event) throws SQLException {        
         try {
+            MainApp.entityManager.getTransaction().begin();
             Lek lek = MainApp.entityManager.find(Lek.class, Integer.parseInt(tf_lek_id.getText()));
             lek.setDawka(Double.parseDouble(tf_lek_daw.getText()));
             lek.setNazwa(tf_lek_naz.getText());
+            MainApp.entityManager.getTransaction().commit();
         } catch (NumberFormatException ef) {
-            System.err.println("Podaj id");
-        }
-        MainApp.entityManager.getTransaction().commit();
+            showExceptionDialog("Podaj id");
+        }       
     }
     
     @FXML
-    void usunLek(ActionEvent event) throws SQLException {
-        MainApp.entityManager.getTransaction().begin();
+    void usunLek(ActionEvent event) throws SQLException {        
         try {
+            MainApp.entityManager.getTransaction().begin();
             Lek lek = MainApp.entityManager.find(Lek.class, Integer.parseInt(tf_lek_id.getText()));
             MainApp.entityManager.remove(lek);
+            MainApp.entityManager.getTransaction().commit();
         } catch (NumberFormatException ef) {
-            System.err.println("Podaj id");
-        }
-        MainApp.entityManager.getTransaction().commit();
+            showExceptionDialog("Podaj id");
+        }        
     }
     
     
@@ -410,38 +408,42 @@ public class FXMLController implements Initializable {
     
     @FXML
     void dodajChorobe(ActionEvent event) throws SQLException {
-        Choroba choroba = new Choroba();
-        choroba.setNazwa(tf_cho_naz.getText());
-        choroba.setTyp(tf_cho_typ.getText());
-        
-        MainApp.entityManager.getTransaction().begin();
-        MainApp.entityManager.persist(choroba);
-        MainApp.entityManager.getTransaction().commit();
+        try {
+            Choroba choroba = new Choroba();
+            choroba.setNazwa(tf_cho_naz.getText());
+            choroba.setTyp(tf_cho_typ.getText());
+
+            MainApp.entityManager.getTransaction().begin();
+            MainApp.entityManager.persist(choroba);
+            MainApp.entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            showExceptionDialog("Wpisz dane");
+        }
     }
     
     @FXML 
-    void modyfikujChorobe(ActionEvent event) throws SQLException {
-        MainApp.entityManager.getTransaction().begin();
+    void modyfikujChorobe(ActionEvent event) throws SQLException {        
         try {
+            MainApp.entityManager.getTransaction().begin();
             Choroba choroba = MainApp.entityManager.find(Choroba.class, Integer.parseInt(tf_cho_id.getText()));
             choroba.setNazwa(tf_cho_naz.getText());
             choroba.setTyp(tf_cho_typ.getText());
+            MainApp.entityManager.getTransaction().commit();
         } catch (NumberFormatException ef) {
-            System.err.println("Podaj id");
-        }
-        MainApp.entityManager.getTransaction().commit();
+            showExceptionDialog("Podaj id");
+        }       
     }
     
     @FXML
-    void usunChorobe(ActionEvent event) throws SQLException {
-        MainApp.entityManager.getTransaction().begin();
+    void usunChorobe(ActionEvent event) throws SQLException {        
         try {
+            MainApp.entityManager.getTransaction().begin();
             Choroba choroba = MainApp.entityManager.find(Choroba.class, Integer.parseInt(tf_cho_id.getText()));
             MainApp.entityManager.remove(choroba);
+            MainApp.entityManager.getTransaction().commit();
         } catch (NumberFormatException ef) {
-            System.err.println("Podaj id");
-        }
-        MainApp.entityManager.getTransaction().commit();
+            showExceptionDialog("Podaj id");
+        }        
     }
     
     @FXML
@@ -462,14 +464,14 @@ public class FXMLController implements Initializable {
                 pokaLeki2.add(new PokaLek(lek.getId_leku(),lek.getNazwa(),lek.getDawka()));
             });
         } catch (NumberFormatException ef) {
-            System.err.println("Podaj id");
+            showExceptionDialog("Podaj id");
         }
     }
     
     @FXML
     void dodajChorobePorady(ActionEvent event) throws SQLException {
-        MainApp.entityManager.getTransaction().begin();
         try {
+            MainApp.entityManager.getTransaction().begin();
             Porada porada = MainApp.entityManager.find(Porada.class, Integer.parseInt(tf_por2_id.getText()));//1 to ex. id
             Choroba choroba = MainApp.entityManager.find(Choroba.class, Integer.parseInt(tf_por_cho_id.getText()));
             List<Choroba> choroby = porada.getChoroby();
@@ -480,16 +482,16 @@ public class FXMLController implements Initializable {
                 choroby.add(choroba);
             }    
             porada.setChoroby(choroby);
+            MainApp.entityManager.getTransaction().commit();
         } catch (NumberFormatException ef) {
-            System.err.println("Podaj id");
-        }
-        MainApp.entityManager.getTransaction().commit();
+            showExceptionDialog("Podaj id");
+        }   
     }
     
     @FXML
-    void usunChorobePorady(ActionEvent event) throws SQLException {
-        MainApp.entityManager.getTransaction().begin();
+    void usunChorobePorady(ActionEvent event) throws SQLException {       
         try {
+            MainApp.entityManager.getTransaction().begin();
             Porada porada = MainApp.entityManager.find(Porada.class, Integer.parseInt(tf_por2_id.getText()));//1 to ex. id
             Choroba choroba = MainApp.entityManager.find(Choroba.class, Integer.parseInt(tf_por_cho_id.getText()));
             List<Choroba> choroby = porada.getChoroby();
@@ -498,17 +500,17 @@ public class FXMLController implements Initializable {
                 porada.setChoroby(choroby);
             } catch (Exception e) {
                 System.err.println("Lista pusta");
-            }  
+            }
+            MainApp.entityManager.getTransaction().commit();
         } catch (NumberFormatException ef) {
-            System.err.println("Podaj id");
-        }
-        MainApp.entityManager.getTransaction().commit();
+            showExceptionDialog("Podaj id");
+        }    
     }
     
     @FXML
     void dodajLekPorady(ActionEvent event) throws SQLException {
-        MainApp.entityManager.getTransaction().begin();
         try {
+            MainApp.entityManager.getTransaction().begin();
             Porada porada = MainApp.entityManager.find(Porada.class, Integer.parseInt(tf_por2_id.getText()));//1 to ex. id
             Lek lek = MainApp.entityManager.find(Lek.class, Integer.parseInt(tf_por_lek_id.getText()));
             List<Lek> leki = porada.getLeki();
@@ -519,86 +521,57 @@ public class FXMLController implements Initializable {
                 leki.add(lek);
             }
             porada.setLeki(leki);
+            MainApp.entityManager.getTransaction().commit();
         } catch (NumberFormatException ef) {
-            System.err.println("Podaj id");
-        }
-        MainApp.entityManager.getTransaction().commit();
+            showExceptionDialog("Podaj id");
+        }  
     }
     
     @FXML
-    void usunLekPorady(ActionEvent event) throws SQLException {
-        MainApp.entityManager.getTransaction().begin();
+    void usunLekPorady(ActionEvent event) throws SQLException {   
         try {
-            Porada porada = MainApp.entityManager.find(Porada.class, Integer.parseInt(tf_por2_id.getText()));//1 to ex. id
+            MainApp.entityManager.getTransaction().begin();
+            Porada porada = MainApp.entityManager.find(Porada.class, Integer.parseInt(tf_por2_id.getText()));
             Lek lek = MainApp.entityManager.find(Lek.class, Integer.parseInt(tf_por_lek_id.getText()));
             List<Lek> leki = porada.getLeki();
             try {
                 leki.remove(lek);
                 porada.setLeki(leki);
             } catch (Exception e) {
-                System.err.println("Lista pusta");
-            }  
+                showExceptionDialog("Lista pusta");
+            }
+            MainApp.entityManager.getTransaction().commit();
         } catch (NumberFormatException ef) {
-            System.err.println("Podaj id");
-        }
-        MainApp.entityManager.getTransaction().commit();
+            showExceptionDialog("Podaj id");
+        } 
     }
 
     @FXML
     void wczytajWynik(ActionEvent event) throws SQLException {
-        Query query = MainApp.entityManager.createQuery("select p.id_pacjenta, p.imie, p.nazwisko, MOD(p.pesel,10) from Pacjent p join p.porady po join po.choroby c where c.id_choroby = :id"); 
-        query.setParameter("id", Integer.parseInt(tf_wysz_id.getText()));
-        Iterator<?> iterator = query.getResultList().iterator();
-        pokaWynik.clear();
-        while (iterator.hasNext()) {
-            Object[] wynik = (Object[]) iterator.next();
-            Integer id = (Integer) wynik[0];
-            String imie = (String) wynik[1];
-            String nazwisko = (String) wynik[2];
-            Integer wiek = (Integer) wynik[3];
-            pokaWynik.add(new PokaWynik(id,imie,nazwisko,wiek));
-        }    
+        try {
+            Query query = MainApp.entityManager.createNativeQuery("select p.id_pacjenta, p.imię, p.nazwisko, ObliczWiek(p.pesel)"
+                    + " from pacjenci p, porady_lekarskie po, choroby_porady cp, choroby c "
+                    + "where c.id_choroby = :id and c.id_choroby = cp.id_choroby and cp.id_porady = po.id_porady and po.id_pacjenta = p.id_pacjenta"); 
+
+            query.setParameter("id", Integer.parseInt(tf_wysz_id.getText()));
+            Iterator<?> iterator = query.getResultList().iterator();
+            pokaWynik.clear();
+            while (iterator.hasNext()) {
+                Object[] wynik = (Object[]) iterator.next();
+                Integer id = (Integer) wynik[0];
+                String imie = (String) wynik[1];
+                String nazwisko = (String) wynik[2];
+                Integer wiek = (Integer) wynik[3];
+                pokaWynik.add(new PokaWynik(id,imie,nazwisko,wiek));
+            }  
+        } catch (Exception e) {
+            showExceptionDialog("Podaj id choroby");
+        }
     }
-    
-    @FXML
-    void LoadStudentsData(ActionEvent event) throws SQLException {
-        
-        cleanTable(tableView);
-        
-        Connection conn = dbHelper.getConnection();
-        ResultSet rs = conn.prepareStatement("SELECT * FROM student").executeQuery();
-        loadData(rs);
-        conn.close();
-        
-    }
-    
+       
     @FXML
     void cleanStudentsData(ActionEvent event) {
         cleanTable(tableView);
-    }
-    
-    @FXML
-    void executeQuery(ActionEvent event) throws SQLException, IOException {
-        
-        cleanTable(tableView);
-        Connection conn = dbHelper.getConnection();
-        
-        if (sqlQuery.getText().isEmpty()) {
-            // populate dialog with controls.
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Alert Dialog");
-            alert.setHeaderText("Error!");
-            alert.setContentText("Empty query detected!");
-            alert.showAndWait();
-        } else {
-            try {
-                ResultSet rs = conn.prepareStatement(sqlQuery.getText()).executeQuery();
-                loadData(rs);
-            } catch (SQLException sqlEx) {
-                showExceptionDialog(sqlEx);
-            }
-        }
-        conn.close();
     }
     
     @FXML
@@ -706,6 +679,28 @@ public class FXMLController implements Initializable {
         choroby3.add(choroba);
         porada3.setChoroby(choroby3);
         MainApp.entityManager.persist(porada3);
+        MainApp.entityManager.getTransaction().commit();    
+    }
+    
+    @FXML
+    void zalaczFunkcje(ActionEvent event) {   
+        MainApp.entityManager.getTransaction().begin();
+        Query query = MainApp.entityManager.createNativeQuery(  
+            "CREATE OR REPLACE FUNCTION ObliczWiek(pesel BIGINT)" +
+                    "RETURNS INTEGER AS $$" +
+                    "DECLARE " +
+                        "stulecie INTEGER = MOD(pesel/100000000,10);" +
+                    "BEGIN " +
+                        "IF stulecie > 7 THEN " +
+                            "RETURN 219 - pesel/1000000000;" +
+                        "END IF;" +
+                        "IF stulecie > 1 THEN " +
+                            "RETURN 19 - pesel/1000000000;" +
+                        "END IF;" +
+                        "RETURN 119 - pesel/1000000000;" +
+                    "END; $$" +
+                    "LANGUAGE PLPGSQL");
+        query.executeUpdate();
         MainApp.entityManager.getTransaction().commit();
     }
     
@@ -767,41 +762,7 @@ public class FXMLController implements Initializable {
         
         tbe_wynik.setItems(pokaWynik);
     }
-    
-    public void loadData(ResultSet rs) throws SQLException {
-        
-        cleanTable(tableView);
-        
-        for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
-            //We are using non property style for making dynamic table
-            final int j = i;
-            TableColumn col = new TableColumn(rs.getMetaData().getColumnName(i + 1));
-            col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
-                public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
-                    return new SimpleStringProperty(param.getValue().get(j).toString());
-                }
-            });
-            
-            tableView.getColumns().addAll(col);
-            System.out.println("Column [" + i + "] ");
-        }
-        
-        while (rs.next()) {
-            //Iterate Row
-            ObservableList<String> row = FXCollections.observableArrayList();
-            for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
-                //Iterate Column
-                row.add(String.valueOf(rs.getObject(i)));
-            }
-            
-            System.out.println("Row [1] added " + row.toString());
-            data.add(row);  
-        }
-
-        //FINALLY ADDED TO TableView
-        tableView.setItems(data);
-    }
-    
+       
     public void cleanTable(TableView tableView) {
         if (!tableView.getItems().isEmpty()) {
             tableView.getItems().clear();
@@ -812,36 +773,10 @@ public class FXMLController implements Initializable {
         }
     }
     
-    public void showExceptionDialog(Exception ex) {
+    public void showExceptionDialog(String tekst) {
         Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle("Exception Dialog");
-        alert.setHeaderText("Look, an exception occured");
-        alert.setContentText(ex.getMessage());
-        // Create expandable Exception.
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        ex.printStackTrace(pw);
-        String exceptionText = sw.toString();
-        
-        Label label = new Label("The exception stacktrace was:");
-        
-        TextArea textArea = new TextArea(exceptionText);
-        textArea.setEditable(false);
-        textArea.setWrapText(true);
-        
-        textArea.setMaxWidth(Double.MAX_VALUE);
-        textArea.setMaxHeight(Double.MAX_VALUE);
-        GridPane.setVgrow(textArea, Priority.ALWAYS);
-        GridPane.setHgrow(textArea, Priority.ALWAYS);
-        
-        GridPane expContent = new GridPane();
-        expContent.setMaxWidth(Double.MAX_VALUE);
-        expContent.add(label, 0, 0);
-        expContent.add(textArea, 0, 1);
-
-        // Set expandable Exception into the dialog pane.
-        alert.getDialogPane().setExpandableContent(expContent);
-        
+        alert.setTitle("Uwaga");
+        alert.setHeaderText(tekst);
         alert.showAndWait();
     }
 }
