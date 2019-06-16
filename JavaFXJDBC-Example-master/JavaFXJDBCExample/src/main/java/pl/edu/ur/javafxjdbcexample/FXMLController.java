@@ -546,7 +546,8 @@ public class FXMLController implements Initializable {
 
     @FXML
     void wczytajWynik(ActionEvent event) throws SQLException {
-        Query query = MainApp.entityManager.createQuery("select p.id_pacjenta, p.imie, p.nazwisko, MOD(p.pesel,10) from Pacjent p");  
+        Query query = MainApp.entityManager.createQuery("select p.id_pacjenta, p.imie, p.nazwisko, MOD(p.pesel,10) from Pacjent p join p.porady po join po.choroby c where c.id_choroby = :id"); 
+        query.setParameter("id", Integer.parseInt(tf_wysz_id.getText()));
         Iterator<?> iterator = query.getResultList().iterator();
         pokaWynik.clear();
         while (iterator.hasNext()) {
